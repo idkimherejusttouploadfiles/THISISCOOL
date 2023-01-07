@@ -1,0 +1,37 @@
+join.Attachment0 = s9s101
+join.Attachment1 = s9s102
+join.MaxFrictionTorque = 15
+
+join = Instance.new("BallSocketConstraint",me)
+join.Attachment0 = s10s111
+join.Attachment1 = s10s112
+join.MaxFrictionTorque = 15
+
+join = Instance.new("BallSocketConstraint",me)
+join.Attachment0 = s11s121
+join.Attachment1 = s11s122
+join.MaxFrictionTorque = 15
+
+join = Instance.new("BallSocketConstraint",me)
+join.Attachment0 = s12s131
+join.Attachment1 = s12s132
+join.MaxFrictionTorque = 15
+
+for i,v in pairs(me:GetDescendants()) do
+    if v:IsA("Accessory") and v.Parent == me and v.Name ~= "seg" then
+        v.Handle.att1_Handle.CFrame = CFrame.new(0, -4, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+    end
+end
+
+Humanoid = me.Humanoid
+
+Humanoid:GetPropertyChangedSignal("FloorMaterial"):Connect(function()
+	if tostring(Humanoid.FloorMaterial):match("ForceField") or tostring(Humanoid.FloorMaterial):match("Air") then do
+			s1.CanCollide = false
+            s2.CanCollide = false
+		end
+        else
+            s1.CanCollide = true
+            s2.CanCollide = true
+        end
+end)
