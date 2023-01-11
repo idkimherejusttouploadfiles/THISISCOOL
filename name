@@ -181,13 +181,13 @@ invis.TextWrapped = true
 invis.Position = UDim2.new(0.5,42,-0.5,-1.5)
 invis.Visible = false
 
-fling.Name = "Head fling"
+fling.Name = "Hat fling"
 fling.Parent = Frame
 fling.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 fling.BorderColor3 = Color3.fromRGB(150, 0, 0)
 fling.Size = UDim2.new(0, 28, 0, 28)
 fling.Font = "Code"
-fling.Text = "Torso fling tool [R6]"
+fling.Text = "Hat fling[R6/R15]"
 fling.TextColor3 = Color3.fromRGB(300,0,0)
 fling.TextSize = 7.000
 fling.TextWrapped = true
@@ -510,7 +510,7 @@ plus.MouseButton1Down:connect(function()
      end
 
        if speed.Text == '10' then
-   TextLabel.Text = "🤌"
+   TextLabel.Text = "speed"
      wait(1.5)
    if stuff == '1' then
    TextLabel.Text = "C00L GUI V1.0    By torrocfo"
@@ -839,6 +839,5 @@ end)
 
 fling.MouseButton1Click:Connect(function()
 
-loadstring(game:HttpGet("https://controlc.com/3fb3269b"))()
-
+loadstring(game:HttpGet('https://gist.githubusercontent.com/1BlueCat/544f7efbe88235666b5b7add65b7344d/raw/f20804bb85542dcc3bc938982e1f05b7ff05cded/FE%2520Hat%2520Fling'))()
 end)
