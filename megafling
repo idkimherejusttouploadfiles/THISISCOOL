@@ -61,7 +61,7 @@ TypeOfFling = 1 -- Default
 -- true is on
 -- false is off
 
-DeleteArm = true
+DeleteArm = false
 -- Prevent killing from other exploitors
 
 SayDramaticStuff = true
@@ -87,7 +87,7 @@ This will increase effectiveness of flinging more harder but reduces the radius 
 Set your fling velocity, the higher the better, but the more broken it is. (This means you are going to get fling off because of the map parts or either bug out)
 --]]
 
-FlingVelocity = 9000 -- Default
+FlingVelocity = 10000 -- Default
 
 -- Set to 0 if you want it to not spin
 
@@ -141,11 +141,11 @@ if SayDramaticStuff then
 
 -- I watch anime so i know
 
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("THE POWER OF HEAVEN CHEATS.","All")
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("this server has bin haxed by pope de haxer","All")
 wait(3)
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("POWER OF DIMENSIONAL DIVERSION.","All")
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("FIAR HER","All")
 wait(2.3)
-game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("ULTIMATE SKILL, SUPERNOVA!!","All")
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer("AAAAAAAA I VIL HAK U ALL","All")
 end
 
 local IsFlying = true
