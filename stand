@@ -74,12 +74,12 @@ TextLabel.TextSize = 12.000
 TextLabel.TextWrapped = false
 
 TextLabel.MouseEnter:connect(function()
-		TextLabel.Text = "MADE BY 1452868465"
-	end)
+	TextLabel.Text = "MADE BY 1452868465"
+end)
 TextLabel.MouseLeave:connect(function()
 	TextLabel.Text = "STAND GUI"
-	end)
-	
+end)
+
 closebutton.Name = "Close"
 closebutton.Parent = Frame
 closebutton.BackgroundColor3 = Color3.fromRGB(0,0,0)
@@ -118,22 +118,20 @@ onof.MouseButton1Down:connect(function()
 	local rs = game:GetService("RunService")
 
 	spawn(function()
-			if lp.Character and lp.Character:FindFirstChild("Head") then
-				lp.Character.Head.CanCollide = false
-				for i,v in pairs(lp.Character:GetChildren()) do
-					if v.Name:lower():find("torso") then
-						v.CanCollide = false
-					end
+		if lp.Character and lp.Character:FindFirstChild("Head") then
+			lp.Character.Head.CanCollide = false
+			for i,v in pairs(lp.Character:GetChildren()) do
+				if v.Name:lower():find("torso") then
+					v.CanCollide = false
 				end
+			end
 
-				if target and target.Character then
-					while locked == 1 do
-					lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(-3,2,2))
-					lp.Character.HumanoidRootPart.Velocity = Vector3.new(3,3,0)
-					--lp.Character.Humanoid.PlatformStand = true
-					startbutton.Text = "PRESS TO OPEN ABILITIES"
-						startbutton.Visible = true
-				end
+			if target and target.Character and locked == 1 then
+				lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(-3,2,2))
+				lp.Character.HumanoidRootPart.Velocity = Vector3.new(3,3,0)
+				--lp.Character.Humanoid.PlatformStand = true
+				startbutton.Text = "PRESS TO OPEN ABILITIES"
+				startbutton.Visible = true
 			end
 			rs.Stepped:Wait()
 		end
@@ -150,7 +148,7 @@ closebutton.MouseButton1Click:Connect(function()
 		onof.Visible = false
 		startbutton.Visible = false
 		namebutton.Visible = false
-	closed = 1
+		closed = 1
 	end
 end)
 
@@ -182,12 +180,12 @@ startbutton.MouseButton1Click:Connect(function()
 	end
 end)
 lockbutton.MouseButton1Click:Connect(function()
-if locked == 1 then
+	if locked == 1 then
 		lockbutton.Text = 'LOCK NEAR USER'
 		locked = 0
-end
-if locked == 0 then
+	end
+	if locked == 0 then
 		lockbutton.Text = "UNLOCK NEAR USER"
 		locked = 1
-end
+	end
 end)
