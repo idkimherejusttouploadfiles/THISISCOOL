@@ -1,0 +1,193 @@
+local main = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local onof = Instance.new("TextButton")
+local TextLabel = Instance.new("TextLabel")
+local closebutton = Instance.new("TextButton")
+local namebutton = Instance.new("TextBox")
+local startbutton = Instance.new("TextButton")
+local lockbutton = Instance.new("TextButton")
+
+main.Name = "main"
+main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+main.ResetOnSpawn = false
+
+
+Frame.Parent = main
+Frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Frame.Position = UDim2.new(0.5, 0, 0.75, 0)
+Frame.Size = UDim2.new(0.25, 0, 0.15, 0)
+Frame.Transparency = 1
+Frame.BorderSizePixel = 0
+
+onof.Name = "BECOME STAND"
+onof.Parent = Frame
+onof.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+onof.BorderColor3 = Color3.fromRGB(255, 255, 255)
+onof.Position = UDim2.new(0.9, 0, 0.3, 0)
+onof.Size = UDim2.new(0.1, 0, 0.25, 0)
+onof.Font = Enum.Font.SourceSans
+onof.Text = "GO"
+onof.TextColor3 = Color3.fromRGB(255, 255, 255)
+onof.TextSize = 15.000
+onof.TextScaled = false
+
+namebutton.Name = "Target"
+namebutton.Parent = Frame
+namebutton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+namebutton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+namebutton.Position = UDim2.new(0, 0, 0.3, 0)
+namebutton.Size = UDim2.new(0.9, 0, 0.25, 0)
+namebutton.Font = Enum.Font.SourceSans
+namebutton.Text = ""
+namebutton.PlaceholderText = " STAND MASTER'S USERNAME"
+namebutton.PlaceholderColor3 = Color3.fromRGB(100, 100, 100)
+namebutton.TextColor3 = Color3.fromRGB(255, 255, 255)
+namebutton.TextSize = 20.000
+namebutton.TextScaled = true
+namebutton.ClearTextOnFocus = false
+namebutton.TextXAlignment = 0
+
+startbutton.Name = "start"
+startbutton.Parent = Frame
+startbutton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+startbutton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+startbutton.Position = UDim2.new(0, 0, 0.6, 0)
+startbutton.Size = UDim2.new(1, 0, 0.35, 0)
+startbutton.Font = Enum.Font.SourceSans
+startbutton.Text = ""
+startbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
+startbutton.TextSize = 20.000
+startbutton.TextScaled = false
+startbutton.Visible = false
+
+TextLabel.Parent = Frame
+TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.Position = UDim2.new(0, 0, 0, 0)
+TextLabel.Size = UDim2.new(0.9, 0, 0.25, 0)
+TextLabel.Font = Enum.Font.Code
+TextLabel.Text = "STAND GUI"
+TextLabel.TextColor3 = Color3.fromRGB(300, 300,300)
+TextLabel.TextSize = 12.000
+TextLabel.TextWrapped = false
+
+TextLabel.MouseEnter:connect(function()
+		TextLabel.Text = "MADE BY 1452868465"
+	end)
+TextLabel.MouseLeave:connect(function()
+	TextLabel.Text = "STAND GUI"
+	end)
+	
+closebutton.Name = "Close"
+closebutton.Parent = Frame
+closebutton.BackgroundColor3 = Color3.fromRGB(0,0,0)
+closebutton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+closebutton.Font = "Code"
+closebutton.Size = UDim2.new(0.1, 0, 0.25, 0)
+closebutton.Text = "×"
+closebutton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closebutton.TextSize = 30
+closebutton.Position =  UDim2.new(0.9, 0, 0, 0)
+
+lockbutton.Name = "lock/unlock"
+lockbutton.Parent = Frame
+lockbutton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+lockbutton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+lockbutton.Position = UDim2.new(0, 0, 0.15, 0)
+lockbutton.Size = UDim2.new(1, 0, 0.1, 0)
+lockbutton.Font = Enum.Font.SourceSans
+lockbutton.Text = "UNLOCK NEAR USER" -- make walking change position relative to user
+lockbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
+lockbutton.TextSize = 20.000
+lockbutton.TextScaled = false
+lockbutton.Visible = false
+locked = 1
+
+Frame.Active = true -- main = gui
+Frame.Draggable = true
+closed = 0
+closed2 = 0
+onof.MouseButton1Down:connect(function()
+
+	local plrs = game:GetService("Players")
+	local lp = plrs.LocalPlayer
+	local targetplayer = namebutton.Text
+	local target = game.Players:FindFirstChild(""..targetplayer.."")
+	local rs = game:GetService("RunService")
+
+	spawn(function()
+			if lp.Character and lp.Character:FindFirstChild("Head") then
+				lp.Character.Head.CanCollide = false
+				for i,v in pairs(lp.Character:GetChildren()) do
+					if v.Name:lower():find("torso") then
+						v.CanCollide = false
+					end
+				end
+
+				if target and target.Character then
+					while locked == 1 do
+					lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(-3,2,2))
+					lp.Character.HumanoidRootPart.Velocity = Vector3.new(3,3,0)
+					--lp.Character.Humanoid.PlatformStand = true
+					startbutton.Text = "PRESS TO OPEN ABILITIES"
+						startbutton.Visible = true
+				end
+			end
+			rs.Stepped:Wait()
+		end
+	end)
+end)
+
+closebutton.MouseButton1Click:Connect(function()
+	if closed == 1 then
+		onof.Visible = true
+		startbutton.Visible = true
+		namebutton.Visible = true
+		closed = 0
+	elseif closed == 0 then
+		onof.Visible = false
+		startbutton.Visible = false
+		namebutton.Visible = false
+	closed = 1
+	end
+end)
+
+startbutton.MouseButton1Click:Connect(function()
+	if closed2 == 0 then
+		Frame.Size = UDim2.new(0.25, 0, 0.5, 0)
+		Frame.Transparency = 0.5
+		onof.Visible = false
+		namebutton.Visible = false
+		closebutton.Visible = false
+		TextLabel.Visible = false
+		lockbutton.Visible = true
+		startbutton.Position = UDim2.new(0, 0, 0, 0)
+		startbutton.Size = UDim2.new(1, 0, 0.1, 0)
+		startbutton.Text = "CLOSE ABILITIES"
+		closed2 = 1
+	elseif closed2 == 1 then
+		Frame.Size = UDim2.new(0.25, 0, 0.15, 0)
+		Frame.Transparency = 1
+		onof.Visible = true
+		namebutton.Visible = true
+		closebutton.Visible = true
+		TextLabel.Visible = true
+		lockbutton.Visible = false
+		startbutton.Position = UDim2.new(0, 0, 0.6, 0)
+		startbutton.Size = UDim2.new(1, 0, 0.35, 0)
+		startbutton.Text = 'OPEN ABILITIES'
+		closed2 = 0
+	end
+end)
+lockbutton.MouseButton1Click:Connect(function()
+if locked == 1 then
+		lockbutton.Text = 'LOCK NEAR USER'
+		locked = 0
+end
+if locked == 0 then
+		lockbutton.Text = "UNLOCK NEAR USER"
+		locked = 1
+end
+end)
