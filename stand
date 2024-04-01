@@ -110,7 +110,7 @@ Frame.Draggable = true
 closed = 0
 closed2 = 0
 onof.MouseButton1Down:connect(function()
-
+	
 	local plrs = game:GetService("Players")
 	local lp = plrs.LocalPlayer
 	local targetplayer = namebutton.Text
@@ -118,24 +118,31 @@ onof.MouseButton1Down:connect(function()
 	local rs = game:GetService("RunService")
 
 	spawn(function()
-		if lp.Character and lp.Character:FindFirstChild("Head") then
-			lp.Character.Head.CanCollide = false
-			for i,v in pairs(lp.Character:GetChildren()) do
-				if v.Name:lower():find("torso") then
-					v.CanCollide = false
+		while locked == 1 do
+			if lp.Character and lp.Character:FindFirstChild("Head") then
+				lp.Character.Head.CanCollide = false
+				for i,v in pairs(lp.Character:GetChildren()) do
+					if v.Name:lower():find("torso") then
+						v.CanCollide = false
+					end
+				end
+
+				if target and target.Character then
+					lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(-3,2,2))
+					lp.Character.HumanoidRootPart.Velocity = Vector3.new(3,3,0)
+					--lp.Character.Humanoid.PlatformStand = true
+				else
+					break
 				end
 			end
-
-			if target and target.Character and locked == 1 then
-				lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(-3,2,2))
-				lp.Character.HumanoidRootPart.Velocity = Vector3.new(3,3,0)
-				--lp.Character.Humanoid.PlatformStand = true
-				startbutton.Text = "PRESS TO OPEN ABILITIES"
-				startbutton.Visible = true
-			end
-			rs.Stepped:Wait()
 		end
+		rs.Stepped:Wait()
 	end)
+	
+	if locked == 1 then
+	startbutton.Text = "PRESS TO OPEN ABILITIES"
+		startbutton.Visible = true
+	end
 end)
 
 closebutton.MouseButton1Click:Connect(function()
