@@ -7,6 +7,21 @@ local namebutton = Instance.new("TextBox")
 local startbutton = Instance.new("TextButton")
 local lockbutton = Instance.new("TextButton")
 
+local summon = Instance.new('TextButton')
+local position = Instance.new("TextButton")
+local flyorwalk = Instance.new("TextButton") -- working swim but impulse stays
+local barrage = Instance.new("TextButton")
+local spin = Instance.new("TextButton") 
+local togglecmds = Instance.new("TextButton")
+local disandname = Instance.new("TextLabel")
+
+local setting = Instance.new("TextButton")
+local standcry = Instance.new("TextButton")
+local walk = Instance.new("TextBox")
+local fly = Instance.new("TextBox")
+local jump = Instance.new("TextBox")
+local gravity = Instance.new("TextBox")
+
 main.Name = "main"
 main.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 main.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
@@ -54,9 +69,9 @@ startbutton.Parent = Frame
 startbutton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 startbutton.BorderColor3 = Color3.fromRGB(255, 255, 255)
 startbutton.Position = UDim2.new(0, 0, 0.6, 0)
-startbutton.Size = UDim2.new(1, 0, 0.35, 0)
+startbutton.Size = UDim2.new(1, 0, 0.3, 0)
 startbutton.Font = Enum.Font.SourceSans
-startbutton.Text = ""
+startbutton.Text = "OPEN ABILITIES"
 startbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
 startbutton.TextSize = 20.000
 startbutton.TextScaled = false
@@ -91,6 +106,19 @@ closebutton.TextColor3 = Color3.fromRGB(255, 255, 255)
 closebutton.TextSize = 30
 closebutton.Position =  UDim2.new(0.9, 0, 0, 0)
 
+summon.Name = "summon"
+summon.Parent = Frame
+summon.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+summon.BorderColor3 = Color3.fromRGB(255, 255, 255)
+summon.Position = UDim2.new(0, 0, 0.25, 0)
+summon.Size = UDim2.new(1, 0, 0.1, 0)
+summon.Font = Enum.Font.SourceSans
+summon.Text = "UNSUMMON"
+summon.TextColor3 = Color3.fromRGB(255, 255, 255)
+summon.TextSize = 20.000
+summon.TextScaled = false
+summon.Visible = false
+
 lockbutton.Name = "lock/unlock"
 lockbutton.Parent = Frame
 lockbutton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
@@ -103,12 +131,50 @@ lockbutton.TextColor3 = Color3.fromRGB(255, 255, 255)
 lockbutton.TextSize = 20.000
 lockbutton.TextScaled = false
 lockbutton.Visible = false
-locked = 1
+
+flyorwalk.Name = "flyorwalk"
+flyorwalk.Parent = Frame
+flyorwalk.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+flyorwalk.BorderColor3 = Color3.fromRGB(255, 255, 255)
+flyorwalk.Position = UDim2.new(0, 0, 0.9, 0)
+flyorwalk.Size = UDim2.new(1, 0, 0.1, 0)
+flyorwalk.Font = Enum.Font.SourceSans
+flyorwalk.Text = "FLY MODE: OFF" -- SWIM WITH CSTOM ANIMATIONS
+flyorwalk.TextColor3 = Color3.fromRGB(255, 255, 255)
+flyorwalk.TextSize = 20.000
+flyorwalk.TextScaled = false
+flyorwalk.Visible = false
+
+setting.Name = "Settings"
+setting.Parent = Frame
+setting.Position = UDim2.new(0.8, 0, 0, 0)
+setting.Size = UDim2.new(0.2, 0, 0.1, 0)
+setting.Text = "⚙"
+setting.TextColor3 = Color3.fromRGB(255,255,255)
+setting.TextSize = 15
+setting.BackgroundColor3 = Color3.fromRGB(0,0,0)
+setting.BorderColor3 = Color3.fromRGB(255,255,255)
+setting.BorderSizePixel = 1
+setting.Visible = false
+
+locked = 0
+present = 0
+summoned = true
+barraging = false
+fly = false
+
+walkspeed = 16
+flyspeed = 50
+jumpower = 50
+gravity = 196.2
 
 Frame.Active = true -- main = gui
 Frame.Draggable = true
 closed = 0
 closed2 = 0
+
+speaker = game:GetService("Players").LocalPlayer
+
 onof.MouseButton1Down:connect(function()
 	
 	local plrs = game:GetService("Players")
@@ -116,46 +182,55 @@ onof.MouseButton1Down:connect(function()
 	local targetplayer = namebutton.Text
 	local target = game.Players:FindFirstChild(""..targetplayer.."")
 	local rs = game:GetService("RunService")
-
-	spawn(function()
-		while locked == 1 do
-			if lp.Character and lp.Character:FindFirstChild("Head") then
-				lp.Character.Head.CanCollide = false
-				for i,v in pairs(lp.Character:GetChildren()) do
-					if v.Name:lower():find("torso") then
-						v.CanCollide = false
-					end
+	
+	if target and target.Character and present == 0 then
+		present = 1
+		locked = 1
+		startbutton.Visible = true
+	end
+	
+spawn(function()
+	if present == 1 then
+	while locked == 1 do
+		if lp.Character and lp.Character:FindFirstChild("Head") then
+			lp.Character.Head.CanCollide = false
+			lp.Character.HumanoidRootPart.CanCollide = false
+			for i,v in pairs(lp.Character:GetChildren()) do
+				if v.Name:lower():find("torso") then
+					v.CanCollide = false
 				end
-
-				if target and target.Character then
-					lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(-3,2,2))
-					lp.Character.HumanoidRootPart.Velocity = Vector3.new(3,3,0)
-					--lp.Character.Humanoid.PlatformStand = true
-				else
-					break
-				end
+			end
+					
+			if target and target.Character then
+				lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(0,3,3))
+				lp.Character.HumanoidRootPart.Velocity = Vector3.new(0,3,3)
+				--lp.Character.Humanoid.PlatformStand = true
+			elseif locked == 0 or fly == 1 then
+				break
 			end
 		end
 		rs.Stepped:Wait()
-	end)
-	
-	if locked == 1 then
-	startbutton.Text = "PRESS TO OPEN ABILITIES"
-		startbutton.Visible = true
+	end
 	end
 end)
+end)
+-- a
 
 closebutton.MouseButton1Click:Connect(function()
 	if closed == 1 then
 		onof.Visible = true
-		startbutton.Visible = true
 		namebutton.Visible = true
 		closed = 0
+		if present == 1 then
+			startbutton.Visible = true
+		end
 	elseif closed == 0 then
 		onof.Visible = false
-		startbutton.Visible = false
 		namebutton.Visible = false
 		closed = 1
+		if present == 1 then
+			startbutton.Visible = false
+		end
 	end
 end)
 
@@ -168,8 +243,11 @@ startbutton.MouseButton1Click:Connect(function()
 		closebutton.Visible = false
 		TextLabel.Visible = false
 		lockbutton.Visible = true
+		setting.Visible = true
+		flyorwalk.Visible = true
+		summon.Visible = true
 		startbutton.Position = UDim2.new(0, 0, 0, 0)
-		startbutton.Size = UDim2.new(1, 0, 0.1, 0)
+		startbutton.Size = UDim2.new(0.8, 0, 0.1, 0)
 		startbutton.Text = "CLOSE ABILITIES"
 		closed2 = 1
 	elseif closed2 == 1 then
@@ -180,8 +258,11 @@ startbutton.MouseButton1Click:Connect(function()
 		closebutton.Visible = true
 		TextLabel.Visible = true
 		lockbutton.Visible = false
+		setting.Visible = false
+		flyorwalk.Visible = false
+		summon.Visible = false
 		startbutton.Position = UDim2.new(0, 0, 0.6, 0)
-		startbutton.Size = UDim2.new(1, 0, 0.35, 0)
+		startbutton.Size = UDim2.new(1, 0, 0.3, 0)
 		startbutton.Text = 'OPEN ABILITIES'
 		closed2 = 0
 	end
@@ -190,9 +271,200 @@ lockbutton.MouseButton1Click:Connect(function()
 	if locked == 1 then
 		lockbutton.Text = 'LOCK NEAR USER'
 		locked = 0
-	end
-	if locked == 0 then
+	elseif locked == 0 then
 		lockbutton.Text = "UNLOCK NEAR USER"
 		locked = 1
+		
+local plrs = game:GetService("Players")
+local lp = plrs.LocalPlayer
+local targetplayer = namebutton.Text
+local target = game.Players:FindFirstChild(""..targetplayer.."")
+local rs = game:GetService("RunService")
+		
+		if present == 1 then
+			while locked == 1 do
+				if lp.Character and lp.Character:FindFirstChild("Head") then
+					lp.Character.Head.CanCollide = false
+					lp.Character.HumanoidRootPart.CanCollide = false
+					for i,v in pairs(lp.Character:GetChildren()) do
+						if v.Name:lower():find("torso") then
+							v.CanCollide = false
+						end
+					end
+
+					if target and target.Character then
+						lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(0,3,3))
+						lp.Character.HumanoidRootPart.Velocity = Vector3.new(0,3,3)
+						--lp.Character.Humanoid.PlatformStand = true
+					elseif locked == 0 or summoned == false then
+						break
+					end
+				end
+				rs.Stepped:Wait()
+			end
+		end
+	end
+if fly == true then -- flying to locked
+	
+	flyorwalk.Text = "FLY MODE: OFF"
+	workspace.Gravity = gravity
+	game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+	speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+	speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+end
+end)
+
+flyorwalk.MouseButton1Click:Connect(function()
+	if fly == false and summoned == true then
+		flyorwalk.Text = "FLY MODE: ON"
+		workspace.Gravity= 50
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = flyspeed
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,false)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,false)
+		speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Swimming)
+			fly = true
+			lockbutton.Text = 'LOCK NEAR USER'
+			locked = 0
+		if game:GetService("Players").LocalPlayer.Character:FindFirstChildOfClass("Humanoid").RigType == Enum.HumanoidRigType.R6 then	
+		local plr = game.Players.LocalPlayer
+		local UpperTorso = plr.Character.UpperTorso
+		local bv = Instance.new("BodyVelocity", torso)
+		bv.velocity = Vector3.new(0,0.1,0)
+		bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+		else
+		local plr = game.Players.LocalPlayer
+		local torso = plr.Character.Torso
+		local bv = Instance.new("BodyVelocity", UpperTorso)
+		bv.velocity = Vector3.new(0,0.1,0)
+		bv.maxForce = Vector3.new(9e9, 9e9, 9e9)
+		end
+	end
+	if fly == true then
+		flyorwalk.Text = "FLY MODE: OFF"
+		workspace.Gravity = gravity
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+		speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+		speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+		fly = false
+	end
+end)
+
+summon.MouseButton1Click:Connect(function()
+	if summoned == true then
+		summon.Text = "SUMMON"
+		if fly == true then
+			flyorwalk.Text = "FLY MODE: OFF"
+			workspace.Gravity = gravity
+			game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = walkspeed
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Climbing,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Flying,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Freefall,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.GettingUp,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Landed,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.PlatformStanding,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Running,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.RunningNoPhysics,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.StrafingNoPhysics,true)
+			speaker.Character.Humanoid:SetStateEnabled(Enum.HumanoidStateType.Swimming,true)
+			speaker.Character.Humanoid:ChangeState(Enum.HumanoidStateType.RunningNoPhysics)
+			fly = false
+		end
+		if barraging == true then
+			barraging = false
+		end
+		while summoned == false do
+			if lp.Character and lp.Character:FindFirstChild("Head") then
+				lp.Character.Head.CanCollide = false
+				lp.Character.HumanoidRootPart.CanCollide = false
+				for i,v in pairs(lp.Character:GetChildren()) do
+					if v.Name:lower():find("torso") then
+						v.CanCollide = false
+					end
+				end
+
+					lp.Character.HumanoidRootPart.CFrame = CFrame.new(10000,10000,10000)
+					lp.Character.HumanoidRootPart.Velocity = Vector3.new(0,0,0)
+					--lp.Character.Humanoid.PlatformStand = true
+			elseif summoned == true then
+				break
+			end
+			rs.Stepped:Wait()
+		end
+		summoned = false
+		
+	elseif summoned == false then
+		summon.Text = "UNSUMMON"
+		summoned = true
+			
+		spawn(function()
+			if present == 1 then
+				while locked == 1 do
+					if lp.Character and lp.Character:FindFirstChild("Head") then
+						lp.Character.Head.CanCollide = false
+						lp.Character.HumanoidRootPart.CanCollide = false
+						for i,v in pairs(lp.Character:GetChildren()) do
+							if v.Name:lower():find("torso") then
+								v.CanCollide = false
+							end
+						end
+
+						if target and target.Character then
+							lp.Character.HumanoidRootPart.CFrame = (target.Character.HumanoidRootPart.CFrame * CFrame.new(0,3,3))
+							lp.Character.HumanoidRootPart.Velocity = Vector3.new(0,3,3)
+							--lp.Character.Humanoid.PlatformStand = true
+						elseif locked == 0 then
+							break
+						end
+					end
+					rs.Stepped:Wait()
+				end
+			end
+		end)
 	end
 end)
